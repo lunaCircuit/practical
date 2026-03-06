@@ -1,0 +1,150 @@
+1. Threads:-  Thread is a lightweight process that runs a task independently in the background 
+without blocking the main UI thread. 
+2. UI Threads:- UI Thread is the main thread of an Android application that handles user 
+interaction and screen updates. 
+MainActivity.kt 
+package com.example.threadexample 
+import androidx.appcompat.app.AppCompatActivity 
+import android.os.Bundle 
+import android.os.Handler 
+import android.os.Looper 
+import android.widget.Button 
+import android.widget.TextView 
+class MainActivity : AppCompatActivity() { 
+lateinit var tvResult: TextView 
+lateinit var btnStart: Button 
+override fun onCreate(savedInstanceState: Bundle?) { 
+super.onCreate(savedInstanceState) 
+setContentView(R.layout.activity_main) 
+tvResult = findViewById(R.id.tvResult) 
+btnStart = findViewById(R.id.btnStart) 
+btnStart.setOnClickListener { 
+Thread { 
+// Background work 
+Thread.sleep(3000) 
+// Switch to UI thread using Handler 
+Handler(Looper.getMainLooper()).post { 
+tvResult.text = "Thread Completed!" 
+} 
+}.start() 
+} 
+} 
+} 
+Activity_main.xml 
+<LinearLayout 
+android:orientation="vertical" 
+android:gravity="center" 
+android:layout_width="match_parent" 
+android:layout_height="match_parent"> 
+<TextView 
+android:id="@+id/tvResult" 
+android:text="Result Here" 
+android:textSize="20sp" 
+android:layout_margin="20dp" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+<Button 
+android:id="@+id/btnStart" 
+android:text="Start Thread" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+</LinearLayout> 
+3. Handler:- Handler is a class used to send and receive messages between threads, mainly to 
+update the UI from a background thread. 
+MainActivity.kt 
+package com.example.handlerexample 
+import androidx.appcompat.app.AppCompatActivity 
+import android.os.Bundle 
+import android.os.Handler 
+import android.os.Looper 
+import android.widget.Button 
+import android.widget.TextView 
+class MainActivity : AppCompatActivity() { 
+private lateinit var tvMessage: TextView 
+private lateinit var btnStart: Button 
+// Handler connected to Main (UI) Thread 
+private val handler = Handler(Looper.getMainLooper()) 
+override fun onCreate(savedInstanceState: Bundle?) { 
+super.onCreate(savedInstanceState) 
+setContentView(R.layout.activity_main) 
+tvMessage = findViewById(R.id.tvMessage) 
+btnStart = findViewById(R.id.btnStart) 
+btnStart.setOnClickListener { 
+// Background Thread 
+Thread { 
+Thread.sleep(3000) // Simulate heavy work 
+// Send result to UI thread using Handler 
+handler.post { 
+tvMessage.text = "Task Completed using Handler!" 
+} 
+}.start() 
+} 
+} 
+} 
+Activity_main.xml 
+<LinearLayout 
+android:orientation="vertical" 
+android:gravity="center" 
+android:layout_width="match_parent" 
+android:layout_height="match_parent"> 
+<TextView 
+android:id="@+id/tvMessage" 
+android:text="Waiting..." 
+android:textSize="22sp" 
+android:layout_margin="20dp" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+<Button 
+android:id="@+id/btnStart" 
+android:text="Start Background Task" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+</LinearLayout> 
+4. Asynchronized:- Asynchronous programming is a technique in which tasks run 
+independently without blocking the main program execution. 
+Mainactivity.kt 
+package com.example.myapplication 
+import androidx.appcompat.app.AppCompatActivity 
+import android.os.Bundle 
+import android.widget.Button 
+import android.widget.TextView 
+import kotlinx.coroutines.* 
+class MainActivity : AppCompatActivity() { 
+private lateinit var tvResult: TextView 
+private lateinit var btnStart: Button 
+override fun onCreate(savedInstanceState: Bundle?) { 
+super.onCreate(savedInstanceState) 
+setContentView(R.layout.activity_main) 
+tvResult = findViewById(R.id.tvResult) 
+btnStart = findViewById(R.id.btnStart) 
+btnStart.setOnClickListener { 
+// Asynchronous task 
+CoroutineScope(Dispatchers.IO).launch { 
+delay(3000)   // Simulate long operation (3 sec) 
+withContext(Dispatchers.Main) { 
+tvResult.text = "Async Task Completed!" 
+} 
+} 
+} 
+} 
+} 
+Activity.xml 
+<LinearLayout 
+android:orientation="vertical" 
+android:gravity="center" 
+android:layout_width="match_parent" 
+android:layout_height="match_parent"> 
+<TextView 
+android:id="@+id/tvResult" 
+android:text="Waiting..." 
+android:textSize="22sp" 
+android:layout_margin="20dp" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+<Button 
+android:id="@+id/btnStart" 
+android:text="Start Async Task" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+</LinearLayout> 
+Build.gradle.kts (Module:app)
