@@ -1,0 +1,141 @@
+//*********************************MainActivity.kt  
+package com.example.myapplication 
+import androidx.appcompat.app.AppCompatActivity 
+import android.os.Bundle 
+import android.widget.* 
+class MainActivity : AppCompatActivity() { 
+lateinit var dbHelper: DBHelper 
+lateinit var etName: EditText 
+lateinit var etAge: EditText 
+lateinit var tvResult: TextView 
+override fun onCreate(savedInstanceState: Bundle?) { 
+super.onCreate(savedInstanceState) 
+setContentView(R.layout.activity_main) 
+dbHelper = DBHelper(this) 
+etName = findViewById(R.id.etName) 
+etAge = findViewById(R.id.etAge) 
+tvResult = findViewById(R.id.tvResult) 
+val btnSave = findViewById<Button>(R.id.btnSave) 
+val btnDelete = findViewById<Button>(R.id.btnDelete) 
+val btnShow = findViewById<Button>(R.id.btnShow) 
+btnSave.setOnClickListener { 
+val name = etName.text.toString() 
+val age = etAge.text.toString() 
+if (dbHelper.insertData(name, age)) { 
+Toast.makeText(this, "Data Saved", Toast.LENGTH_SHORT).show() 
+} else { 
+Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show() 
+} 
+} 
+btnDelete.setOnClickListener { 
+val name = etName.text.toString() 
+if (dbHelper.deleteData(name)) { 
+Toast.makeText(this, "Data Deleted", Toast.LENGTH_SHORT).show() 
+} else { 
+Toast.makeText(this, "Not Found", Toast.LENGTH_SHORT).show() 
+} 
+} 
+btnShow.setOnClickListener { 
+val data = dbHelper.getAllData() 
+tvResult.text = data 
+} 
+} 
+} 
+
+
+
+
+//***********************************Activity.xml 
+<LinearLayout 
+xmlns:android="http://schemas.android.com/apk/res/android" 
+android:orientation="vertical" 
+android:padding="16dp" 
+android:layout_width="match_parent" 
+android:layout_height="match_parent"> 
+<EditText 
+android:id="@+id/etName" 
+android:hint="Enter Name" 
+android:layout_width="match_parent" 
+android:layout_height="wrap_content"/> 
+<EditText 
+android:id="@+id/etAge" 
+android:hint="Enter Age" 
+android:inputType="number" 
+android:layout_width="match_parent" 
+android:layout_height="wrap_content"/> 
+<Button 
+android:id="@+id/btnSave" 
+android:text="Save" 
+android:layout_width="match_parent" 
+android:layout_height="wrap_content"/> 
+<Button 
+android:id="@+id/btnDelete" 
+android:text="Delete" 
+android:layout_width="match_parent" 
+android:layout_height="wrap_content"/> 
+<Button 
+android:id="@+id/btnShow" 
+android:text="Show All" 
+android:layout_width="match_parent" 
+android:layout_height="wrap_content"/> 
+<TextView 
+android:id="@+id/tvResult" 
+android:layout_width="match_parent" 
+android:layout_height="wrap_content" 
+android:paddingTop="20dp"/> 
+</LinearLayout> 
+
+
+
+
+
+
+
+
+
+//*********************************DBHelper.kt 
+package com.example.myapplication 
+import android.content.ContentValues 
+import android.content.Context 
+import android.database.sqlite.SQLiteDatabase 
+import android.database.sqlite.SQLiteOpenHelper 
+class DBHelper(context: Context) : 
+SQLiteOpenHelper(context, "StudentDB", null, 1) { 
+override fun onCreate(db: SQLiteDatabase) { 
+db.execSQL( 
+"CREATE TABLE Student(id INTEGER PRIMARY KEY AUTOINCREMENT, name 
+TEXT, age INTEGER)" 
+) 
+} 
+override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { 
+db.execSQL("DROP TABLE IF EXISTS Student") 
+onCreate(db) 
+} 
+fun insertData(name: String, age: String): Boolean { 
+val db = this.writableDatabase 
+val contentValues = ContentValues() 
+contentValues.put("name", name) 
+contentValues.put("age", age) 
+val result = db.insert("Student", null, contentValues) 
+return result != -1L 
+} 
+fun deleteData(name: String): Boolean { 
+val db = this.writableDatabase 
+val result = db.delete("Student", "name=?", arrayOf(name)) 
+return result > 0 
+} 
+fun getAllData(): String { 
+val db = this.readableDatabase 
+val cursor = db.rawQuery("SELECT * FROM Student", null) 
+var data = "" 
+if (cursor.moveToFirst()) { 
+do { 
+data += "ID: ${cursor.getInt(0)}\n" 
+data += "Name: ${cursor.getString(1)}\n" 
+data += "Age: ${cursor.getInt(2)}\n\n" 
+} while (cursor.moveToNext()) 
+} 
+cursor.close() 
+return data 
+} 
+} 
