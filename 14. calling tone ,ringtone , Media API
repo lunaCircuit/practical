@@ -1,0 +1,169 @@
+● The Media API in Android is used to handle and play multimedia files such as audio 
+and video. The MediaPlayer class is commonly used to control playback functions 
+like play, pause, and stop. 
+MainActivity .kt 
+package com.example.myapplication 
+import androidx.appcompat.app.AppCompatActivity 
+import android.os.Bundle 
+import android.widget.Button 
+import android.media.MediaPlayer 
+class MainActivity : AppCompatActivity() { 
+lateinit var mediaPlayer: MediaPlayer 
+override fun onCreate(savedInstanceState: Bundle?) { 
+super.onCreate(savedInstanceState) 
+setContentView(R.layout.activity_main) 
+val btnPlay = findViewById<Button>(R.id.btnPlay) 
+val btnStop = findViewById<Button>(R.id.btnStop) 
+mediaPlayer = MediaPlayer.create(this, R.raw.song) 
+btnPlay.setOnClickListener { 
+if (!mediaPlayer.isPlaying) { 
+mediaPlayer.start() 
+} 
+} 
+btnStop.setOnClickListener { 
+if (mediaPlayer.isPlaying) { 
+mediaPlayer.pause() 
+mediaPlayer.seekTo(0)   // rewind to start 
+} 
+} 
+} 
+override fun onDestroy() { 
+super.onDestroy() 
+mediaPlayer.release()   // free memory 
+} 
+} 
+Activity .xml 
+<LinearLayout 
+android:orientation="vertical" 
+android:gravity="center" 
+android:layout_width="match_parent" 
+android:layout_height="match_parent"> 
+<Button 
+android:id="@+id/btnPlay" 
+android:text="Play Music" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+<Button 
+android:id="@+id/btnStop" 
+android:text="Stop Music" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+</LinearLayout> 
+● The Telephone API in Android is used to perform calling functions. It uses Intent actions 
+such as ACTION_DIAL to open the dialer and ACTION_CALL to make a direct phone 
+call (with required permission). 
+MainActivity .kt 
+package com.example.myapplication 
+import androidx.appcompat.app.AppCompatActivity 
+import android.os.Bundle 
+import android.widget.Button 
+import android.content.Intent 
+import android.net.Uri 
+class MainActivity : AppCompatActivity() { 
+override fun onCreate(savedInstanceState: Bundle?) { 
+super.onCreate(savedInstanceState) 
+setContentView(R.layout.activity_main) 
+val btnCall = 
+findViewById<Button>(R.id.btnCall) 
+btnCall.setOnClickListener { 
+val intent = Intent(Intent.ACTION_DIAL) 
+intent.data = Uri.parse("tel:9372347616") 
+startActivity(intent) 
+} 
+} 
+} 
+Activity_main.xml 
+<LinearLayout 
+android:gravity="center" 
+android:orientation="vertical" 
+android:layout_width="match_parent" 
+android:layout_height="match_parent"> 
+<Button 
+android:id="@+id/btnCall" 
+android:text="Call Now" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+</LinearLayout> 
+B. Programming Security and permissions 
+Manifest.xml 
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+package="com.example.myapplication"> 
+<!-- Camera Permission --> 
+<uses-feature 
+android:name="android.hardware.camera" 
+android:required="false" /> 
+<uses-permission android:name="android.permission.CAMERA"/> 
+<application 
+android:allowBackup="true" 
+android:theme="@style/Theme.AppCompat.Light.DarkActionBar"> 
+<activity android:name=".MainActivity" 
+android:exported="true" 
+android:label="Some Name"> 
+<intent-filter> 
+<action android:name="android.intent.action.MAIN"/> 
+<category android:name="android.intent.category.LAUNCHER"/> 
+</intent-filter> 
+</activity> 
+</application> 
+</manifest> 
+MainActivity.kt 
+package com.example.myapplication 
+import android.Manifest 
+import android.content.pm.PackageManager 
+import android.os.Bundle 
+import android.widget.Button 
+import android.widget.Toast 
+import androidx.appcompat.app.AppCompatActivity 
+import androidx.core.app.ActivityCompat 
+import androidx.core.content.ContextCompat 
+class MainActivity : AppCompatActivity() { 
+private val CAMERA_PERMISSION_CODE = 101 
+override fun onCreate(savedInstanceState: Bundle?) { 
+super.onCreate(savedInstanceState) 
+setContentView(R.layout.activity_main) 
+val btnPermission = findViewById<Button>(R.id.btnPermission) 
+btnPermission.setOnClickListener { 
+if (ContextCompat.checkSelfPermission( 
+this, 
+Manifest.permission.CAMERA 
+) == PackageManager.PERMISSION_GRANTED 
+) { 
+Toast.makeText(this, "Permission Already Granted", Toast.LENGTH_SHORT).show() 
+} else { 
+ActivityCompat.requestPermissions( 
+this, 
+arrayOf(Manifest.permission.CAMERA), 
+CAMERA_PERMISSION_CODE 
+) 
+} 
+} 
+} 
+override fun onRequestPermissionsResult( 
+requestCode: Int, 
+permissions: Array<String>, 
+grantResults: IntArray 
+) { 
+super.onRequestPermissionsResult(requestCode, permissions, grantResults) 
+if (requestCode == CAMERA_PERMISSION_CODE) { 
+if (grantResults.isNotEmpty() && 
+grantResults[0] == PackageManager.PERMISSION_GRANTED 
+) { 
+Toast.makeText(this, "Camera Permission Granted", Toast.LENGTH_SHORT).show() 
+} else { 
+Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show() 
+} 
+} 
+} 
+} 
+Activity_main.xml 
+<LinearLayout 
+android:gravity="center" 
+android:orientation="vertical" 
+android:layout_width="match_parent" 
+android:layout_height="match_parent"> 
+<Button 
+android:id="@+id/btnPermission" 
+android:text="Request Camera Permission" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"/> 
+</LinearLayout>
