@@ -1,0 +1,71 @@
+//*********************************Activity_xml 
+<?xml version="1.0" encoding="utf-8"?> 
+<LinearLayout 
+xmlns:android="http://schemas.android.com/apk/res/android" 
+android:layout_width="match_parent" 
+android:layout_height="match_parent" 
+android:gravity="center" 
+android:orientation="vertical" 
+android:padding="20dp"> 
+<TextView 
+android:id="@+id/tvTimer" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content" 
+android:text="0" 
+android:textSize="40sp" 
+android:textStyle="bold"/> 
+<Button 
+android:id="@+id/btnStart" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content" 
+android:text="Start" 
+android:layout_marginTop="20dp"/> 
+<Button 
+android:id="@+id/btnStop" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content" 
+android:text="Stop" 
+android:layout_marginTop="10dp"/> 
+</LinearLayout> 
+
+
+
+
+//********************************Mainactivity_kt 
+package com.example.timerapp 
+import androidx.appcompat.app.AppCompatActivity 
+import android.os.Bundle 
+import android.os.Handler 
+import android.widget.Button 
+import android.widget.TextView 
+class MainActivity : AppCompatActivity() { 
+lateinit var timerText: TextView 
+lateinit var startBtn: Button 
+lateinit var stopBtn: Button 
+var seconds = 0 
+var isRunning = false 
+val handler = Handler() 
+val runnable = object : Runnable { 
+override fun run() { 
+if (isRunning) { 
+seconds++ 
+timerText.text = seconds.toString() 
+handler.postDelayed(this, 1000) // repeat every 1 sec 
+} 
+} 
+} 
+override fun onCreate(savedInstanceState: Bundle?) { 
+super.onCreate(savedInstanceState) 
+setContentView(R.layout.activity_main) 
+timerText = findViewById(R.id.tvTimer) 
+startBtn = findViewById(R.id.btnStart) 
+stopBtn = findViewById(R.id.btnStop) 
+startBtn.setOnClickListener { 
+isRunning = true 
+handler.post(runnable) 
+} 
+stopBtn.setOnClickListener { 
+isRunning = false 
+} 
+} 
+}
