@@ -1,0 +1,60 @@
+//**************************Activity_xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ android:gravity="center"
+ android:padding="20dp">
+ <TextView
+ android:id="@+id/tvTitle"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Dynamic Image Change"
+ android:textSize="20sp"
+ android:textStyle="bold"/>
+ <ImageView
+ android:id="@+id/imageView"
+ android:layout_width="200dp"
+ android:layout_height="200dp"
+ android:src="@drawable/image1"
+ android:layout_marginTop="20dp"/>
+ <Button
+ android:id="@+id/btnChange"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Change Image"
+ android:layout_marginTop="20dp"/>
+</LinearLayout>
+
+
+
+
+
+//**************************MainActivity_kt
+package com.example.dynamicimage
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
+class MainActivity : AppCompatActivity() {
+ lateinit var imageView: ImageView
+ lateinit var changeBtn: Button
+ var isImageOne = true
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main)
+ imageView = findViewById(R.id.imageView)
+ changeBtn = findViewById(R.id.btnChange)
+ changeBtn.setOnClickListener {
+ if (isImageOne) {
+ imageView.setImageResource(R.drawable.image2)
+ isImageOne = false
+ } else {
+ imageView.setImageResource(R.drawable.image1)
+ isImageOne = true
+ }
+ }
+ }
+}
