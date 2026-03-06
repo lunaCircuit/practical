@@ -1,0 +1,132 @@
+//***************1. color.xml file 
+<?xml version="1.0" encoding="utf-8"?> 
+<resources> 
+<color name="colorPrimary">#008577</color> 
+<color name="colorPrimaryDark">#00574B</color> 
+<color name="colorAccent">#D81B60</color> 
+// Define new colors here using hexadecimal color codes. 
+<color name="Red">#FF0000</color> 
+<color name="Blue">#0000FF</color> 
+<color name="Pink">#FF00FF</color> 
+<color name="Cyan">#00FFFF</color> 
+<color name="Grey">#AABBFF</color> 
+</resources> 
+
+
+//**************activity_main.xml
+
+<LinearLayout 
+android:layout_width="409dp" 
+android:layout_height="729dp" 
+android:orientation="vertical" 
+tools:layout_editor_absoluteX="1dp" 
+tools:layout_editor_absoluteY="1dp"> 
+<TextView 
+android:id="@+id/textView" 
+android:layout_width="match_parent" 
+android:layout_height="56dp" 
+android:text="TextView" 
+android:background="@color/Red" 
+/> 
+ 
+<TextView 
+android:id="@+id/textView2" 
+android:layout_width="match_parent" 
+android:layout_height="52dp" 
+android:text="TextView" 
+android:background="@color/Grey" 
+/> 
+ 
+<TextView 
+android:id="@+id/textView3" 
+android:layout_width="match_parent" 
+android:layout_height="59dp" 
+android:text="TextView" 
+android:background="@color/Blue" 
+/> 
+ 
+<TextView 
+android:id="@+id/textView4" 
+android:layout_width="match_parent" 
+android:layout_height="51dp" 
+android:text="TextView" 
+android:background="@color/Cyan" 
+/> 
+ 
+</LinearLayout> 
+</androidx.constraintlayout.widget.ConstraintLayout> 
+ 
+
+ 
+//*************************styles.xml 
+<resources xmlns:tools="http://schemas.android.com/tools"> 
+    <!-- Base application theme. --> 
+    <style name="Base.Theme.Pract2" parent="Theme.Material3.DayNight.NoActionBar"> 
+ 
+        <!-- Customize your light theme here. --> 
+        <!-- Customize your theme here. → 
+ 
+         <item name="colorPrimary">@color/colorPrimary</item> 
+         <item name="colorPrimaryDark">@color/colorPrimaryDark</item> 
+         <item name="colorAccent">@color/colorAccent</item> 
+         <item name="android:background">#000000</item> 
+ 
+<item name="android:textColor">#FFFFAA</item> 
+</style> 
+</resources> 
+
+
+
+
+//***************************strings.xml 
+<resources> 
+<string name="app_name">Prof. Damini Sharma</string> 
+<string name="Heading">Programming Resources</string> 
+<string name="Description"></string> 
+</resources> 
+
+
+//************************ activity_main.xml 
+<TextView 
+android:id="@+id/textView" 
+android:layout_width="match_parent" 
+android:layout_height="56dp" 
+android:background="@color/Red" 
+android:textSize="24sp" 
+android:text="@string/Heading" 
+/> 
+<TextView 
+android:id="@+id/textView2" 
+android:layout_width="match_parent" 
+android:layout_height="wrap_content" 
+android:background="@color/Grey" 
+android:textSize="24sp" 
+android:text="@string/Description" 
+/> 
+
+
+//****************** dimens.xml 
+<?xml version="1.0" encoding="utf-8" ?> 
+<resources> 
+<dimen name="textview_height">35dp</dimen> 
+<dimen name="textview_width">150dp</dimen> 
+<dimen name="font_size">26sp</dimen> 
+</resources> 
+
+
+
+//************ activity_main.xml 
+<LinearLayout 
+android:layout_width="409dp" 
+android:layout_height="729dp" 
+android:orientation="vertical" 
+tools:layout_editor_absoluteX="1dp" 
+tools:layout_editor_absoluteY="1dp"> 
+<ImageView 
+android:id="@+id/imageView" 
+android:layout_width="match_parent" 
+android:layout_height="wrap_content" 
+android:src="@drawable/shahid" 
+/> 
+</LinearLayout> 
+</androidx.constraintlayout.widget.ConstraintLayout>
